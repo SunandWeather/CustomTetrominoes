@@ -7,8 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BAF4C6781E2443D000AF24B9 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF4C6771E2443D000AF24B9 /* main.c */; };
 		BAF4C67A1E2443D000AF24B9 /* CustomTetrominoes.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = BAF4C6791E2443D000AF24B9 /* CustomTetrominoes.1 */; };
+		BAF4C6821E2443F300AF24B9 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAF4C6801E2443F300AF24B9 /* SDL2_image.framework */; };
+		BAF4C6831E2443F300AF24B9 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAF4C6811E2443F300AF24B9 /* SDL2.framework */; };
+		BAF4C6971E24443100AF24B9 /* blocks.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF4C6841E24443100AF24B9 /* blocks.c */; };
+		BAF4C6981E24443100AF24B9 /* game.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF4C6861E24443100AF24B9 /* game.c */; };
+		BAF4C6991E24443100AF24B9 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF4C6881E24443100AF24B9 /* main.c */; };
+		BAF4C69A1E24443100AF24B9 /* sprite.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF4C6951E24443100AF24B9 /* sprite.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,8 +31,27 @@
 
 /* Begin PBXFileReference section */
 		BAF4C6741E2443D000AF24B9 /* CustomTetrominoes */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CustomTetrominoes; sourceTree = BUILT_PRODUCTS_DIR; };
-		BAF4C6771E2443D000AF24B9 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		BAF4C6791E2443D000AF24B9 /* CustomTetrominoes.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = CustomTetrominoes.1; sourceTree = "<group>"; };
+		BAF4C6801E2443F300AF24B9 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
+		BAF4C6811E2443F300AF24B9 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		BAF4C6841E24443100AF24B9 /* blocks.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = blocks.c; sourceTree = "<group>"; };
+		BAF4C6851E24443100AF24B9 /* blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blocks.h; sourceTree = "<group>"; };
+		BAF4C6861E24443100AF24B9 /* game.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = game.c; sourceTree = "<group>"; };
+		BAF4C6871E24443100AF24B9 /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = "<group>"; };
+		BAF4C6881E24443100AF24B9 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		BAF4C68A1E24443100AF24B9 /* game_over.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = game_over.png; sourceTree = "<group>"; };
+		BAF4C68B1E24443100AF24B9 /* ground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground.png; sourceTree = "<group>"; };
+		BAF4C68C1E24443100AF24B9 /* I_block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = I_block.png; sourceTree = "<group>"; };
+		BAF4C68D1E24443100AF24B9 /* J_block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = J_block.png; sourceTree = "<group>"; };
+		BAF4C68E1E24443100AF24B9 /* l_block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = l_block.png; sourceTree = "<group>"; };
+		BAF4C68F1E24443100AF24B9 /* O_block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = O_block.png; sourceTree = "<group>"; };
+		BAF4C6901E24443100AF24B9 /* S_block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = S_block.png; sourceTree = "<group>"; };
+		BAF4C6911E24443100AF24B9 /* T_block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = T_block.png; sourceTree = "<group>"; };
+		BAF4C6921E24443100AF24B9 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.png; sourceTree = "<group>"; };
+		BAF4C6931E24443100AF24B9 /* wall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wall.png; sourceTree = "<group>"; };
+		BAF4C6941E24443100AF24B9 /* Z_block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Z_block.png; sourceTree = "<group>"; };
+		BAF4C6951E24443100AF24B9 /* sprite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sprite.c; sourceTree = "<group>"; };
+		BAF4C6961E24443100AF24B9 /* sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sprite.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +59,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BAF4C6821E2443F300AF24B9 /* SDL2_image.framework in Frameworks */,
+				BAF4C6831E2443F300AF24B9 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +70,8 @@
 		BAF4C66B1E2443D000AF24B9 = {
 			isa = PBXGroup;
 			children = (
+				BAF4C6801E2443F300AF24B9 /* SDL2_image.framework */,
+				BAF4C6811E2443F300AF24B9 /* SDL2.framework */,
 				BAF4C6761E2443D000AF24B9 /* CustomTetrominoes */,
 				BAF4C6751E2443D000AF24B9 /* Products */,
 			);
@@ -60,10 +88,35 @@
 		BAF4C6761E2443D000AF24B9 /* CustomTetrominoes */ = {
 			isa = PBXGroup;
 			children = (
-				BAF4C6771E2443D000AF24B9 /* main.c */,
 				BAF4C6791E2443D000AF24B9 /* CustomTetrominoes.1 */,
+				BAF4C6841E24443100AF24B9 /* blocks.c */,
+				BAF4C6851E24443100AF24B9 /* blocks.h */,
+				BAF4C6861E24443100AF24B9 /* game.c */,
+				BAF4C6871E24443100AF24B9 /* game.h */,
+				BAF4C6881E24443100AF24B9 /* main.c */,
+				BAF4C6951E24443100AF24B9 /* sprite.c */,
+				BAF4C6961E24443100AF24B9 /* sprite.h */,
+				BAF4C6891E24443100AF24B9 /* res */,
 			);
 			path = CustomTetrominoes;
+			sourceTree = "<group>";
+		};
+		BAF4C6891E24443100AF24B9 /* res */ = {
+			isa = PBXGroup;
+			children = (
+				BAF4C68A1E24443100AF24B9 /* game_over.png */,
+				BAF4C68B1E24443100AF24B9 /* ground.png */,
+				BAF4C68C1E24443100AF24B9 /* I_block.png */,
+				BAF4C68D1E24443100AF24B9 /* J_block.png */,
+				BAF4C68E1E24443100AF24B9 /* l_block.png */,
+				BAF4C68F1E24443100AF24B9 /* O_block.png */,
+				BAF4C6901E24443100AF24B9 /* S_block.png */,
+				BAF4C6911E24443100AF24B9 /* T_block.png */,
+				BAF4C6921E24443100AF24B9 /* title.png */,
+				BAF4C6931E24443100AF24B9 /* wall.png */,
+				BAF4C6941E24443100AF24B9 /* Z_block.png */,
+			);
+			path = res;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,7 +170,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BAF4C6781E2443D000AF24B9 /* main.c in Sources */,
+				BAF4C69A1E24443100AF24B9 /* sprite.c in Sources */,
+				BAF4C6971E24443100AF24B9 /* blocks.c in Sources */,
+				BAF4C6981E24443100AF24B9 /* game.c in Sources */,
+				BAF4C6991E24443100AF24B9 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +253,10 @@
 		BAF4C67E1E2443D000AF24B9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -204,6 +264,10 @@
 		BAF4C67F1E2443D000AF24B9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
