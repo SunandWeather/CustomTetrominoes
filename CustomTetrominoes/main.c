@@ -116,17 +116,17 @@ int main(int argc, const char * argv[])
     }
     
     //Initialize paths
-    char l_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/I_block.png";
-    char L_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/L_block.png";
-    char O_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/O_block.png";
-    char J_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/J_block.png";
-    char Z_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/Z_block.png";
-    char S_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/S_block.png";
-    char T_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/T_block.png";
-    char wall_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/wall.png";
-    char ground_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/ground.png";
-    char title_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/title.png";
-    char game_over_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/game_over.png";
+    char l_path[256] = "res/I_block.png";
+    char L_path[256] = "res/L_block.png";
+    char O_path[256] = "res/O_block.png";
+    char J_path[256] = "res/J_block.png";
+    char Z_path[256] = "res/Z_block.png";
+    char S_path[256] = "res/S_block.png";
+    char T_path[256] = "res/T_block.png";
+    char wall_path[256] = "res/wall.png";
+    char ground_path[256] = "res/ground.png";
+    char title_path[256] = "res/title.png";
+    char game_over_path[256] = "res/game_over.png";
     
     //Creating sprites
     sprite* l_sprite = create_sprite (BLOCK_WIDTH, BLOCK_HEIGHT, renderer, l_path);
