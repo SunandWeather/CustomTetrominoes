@@ -1,6 +1,6 @@
 //
 //  main.c
-//  Tetris
+//  Custom Tetrominoes
 //
 //  Created by Johan Sunnanväder on 2016-12-29.
 //  Copyright (c) 2016 SunandWeather. All rights reserved.
@@ -20,6 +20,7 @@
 #include "game.h"
 
 #include "time.h"
+#include "SDL2_rotozoom.h"
 
 
 int HIGHT_IN_BLOCKS;
@@ -31,6 +32,9 @@ int SCREEN_WIDTH;
 
 //Initialize main game function
 int game_loop(gameData* data);
+
+//Initialize file reader and resizer
+sprite* create_sprite (int wDesired, int hDesired, SDL_Renderer* renderer, char path[256]);
 
 //Loads media
 SDL_Texture* loadMedia(char path, SDL_Rect rect, SDL_Renderer *renderer);
@@ -111,33 +115,33 @@ int main(int argc, const char * argv[])
 		return 1;
     }
     
-    /* Set up the sprites */
-	SDL_Texture* l_block_texture = IMG_LoadTexture(renderer, "res/I_block.png");
-    SDL_Texture* L_block_texture = IMG_LoadTexture(renderer, "res/L_block.png");
-    SDL_Texture* O_block_texture = IMG_LoadTexture(renderer, "res/O_block.png");
-    SDL_Texture* J_block_texture = IMG_LoadTexture(renderer, "res/J_block.png");
-    SDL_Texture* Z_block_texture = IMG_LoadTexture(renderer, "res/Z_block.png");
-    SDL_Texture* S_block_texture = IMG_LoadTexture(renderer, "res/S_block.png");
-    SDL_Texture* T_block_texture = IMG_LoadTexture(renderer, "res/T_block.png");
-    SDL_Texture* wall_texture = IMG_LoadTexture(renderer, "res/wall.png");
-    SDL_Texture* ground_texture = IMG_LoadTexture(renderer, "res/ground.png");
-    SDL_Texture* title_texture = IMG_LoadTexture(renderer, "res/title.png");
-    SDL_Texture* game_over_texture = IMG_LoadTexture(renderer, "res/game_over.png");
+    //Initialize paths
+    char l_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/I_block.png";
+    char L_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/L_block.png";
+    char O_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/O_block.png";
+    char J_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/J_block.png";
+    char Z_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/Z_block.png";
+    char S_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/S_block.png";
+    char T_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/T_block.png";
+    char wall_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/wall.png";
+    char ground_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/ground.png";
+    char title_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/title.png";
+    char game_over_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/game_over.png";
     
-    sprite* l_sprite = init_sprite(l_block_texture, 0, 0, BLOCK_HEIGHT, BLOCK_WIDTH);
-    sprite* L_sprite = init_sprite(L_block_texture, 0, 0, BLOCK_HEIGHT, BLOCK_WIDTH);
-    sprite* O_sprite = init_sprite(O_block_texture, 0, 0, BLOCK_HEIGHT, BLOCK_WIDTH);
-    sprite* J_sprite = init_sprite(J_block_texture, 0, 0, BLOCK_HEIGHT, BLOCK_WIDTH);
-    sprite* Z_sprite = init_sprite(Z_block_texture, 0, 0, BLOCK_HEIGHT, BLOCK_WIDTH);
-    sprite* S_sprite = init_sprite(S_block_texture, 0, 0, BLOCK_HEIGHT, BLOCK_WIDTH);
-    sprite* T_sprite = init_sprite(T_block_texture, 0, 0, BLOCK_HEIGHT, BLOCK_WIDTH);
-    sprite* wall_sprite = init_sprite(wall_texture, 0, 0, BLOCK_HEIGHT, BLOCK_WIDTH);
-    sprite* ground_sprite = init_sprite(ground_texture, 0, 0, BLOCK_HEIGHT, BLOCK_WIDTH);
-    sprite* title_sprite = init_sprite(title_texture, 0, 0, BLOCK_WIDTH * 4, BLOCK_HEIGHT * 2);
-    sprite* game_over_sprite = init_sprite(game_over_texture, 0, 0, BLOCK_WIDTH * 4, BLOCK_HEIGHT * 2);
+    //Creating sprites
+    sprite* l_sprite = create_sprite (BLOCK_WIDTH, BLOCK_HEIGHT, renderer, l_path);
+    sprite* L_sprite = create_sprite (BLOCK_WIDTH, BLOCK_HEIGHT, renderer, L_path);
+    sprite* O_sprite = create_sprite (BLOCK_WIDTH, BLOCK_HEIGHT, renderer, O_path);
+    sprite* J_sprite = create_sprite (BLOCK_WIDTH, BLOCK_HEIGHT, renderer, J_path);
+    sprite* Z_sprite = create_sprite (BLOCK_WIDTH, BLOCK_HEIGHT, renderer, Z_path);
+    sprite* S_sprite = create_sprite (BLOCK_WIDTH, BLOCK_HEIGHT, renderer, S_path);
+    sprite* T_sprite = create_sprite (BLOCK_WIDTH, BLOCK_HEIGHT, renderer, T_path);
+    sprite* wall_sprite = create_sprite (BLOCK_WIDTH, BLOCK_HEIGHT, renderer, wall_path);
+    sprite* ground_sprite = create_sprite (BLOCK_WIDTH, BLOCK_HEIGHT, renderer, ground_path);
+    sprite* title_sprite = create_sprite (4 * BLOCK_WIDTH, 2 * BLOCK_HEIGHT, renderer, title_path);
+    sprite* game_over_sprite = create_sprite (4 * BLOCK_WIDTH, 2 * BLOCK_HEIGHT, renderer, game_over_path);
     
-    
-    /* Compiling game data */
+    // Compiling game data
     gameData data;
     
     //SDL
@@ -232,4 +236,31 @@ int main(int argc, const char * argv[])
     free_sprite(title_sprite);
     free_sprite(game_over_sprite);
     
+}
+
+sprite* create_sprite (int wDesired, int hDesired, SDL_Renderer* renderer, char path[256]) {
+    sprite* sprite;
+    int scalingFactorx;
+    int scalingFactory;
+    int imageWidth;
+    int imageHeight;
+    
+    SDL_Surface* surface = IMG_Load(path);
+    imageWidth = surface->w;
+    imageHeight = surface->h;
+    scalingFactorx = (imageWidth / wDesired) + 1;
+    scalingFactory = (imageHeight / hDesired) + 1;
+    if ((imageWidth % wDesired) > 0) {
+        scalingFactorx++;
+    }
+    if ((imageHeight % hDesired) > 0) {
+        scalingFactory++;
+    }
+    surface = shrinkSurface(surface, scalingFactorx, scalingFactory);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    
+    sprite = init_sprite(texture, 0, 0, wDesired, hDesired);
+    
+    return sprite;
 }

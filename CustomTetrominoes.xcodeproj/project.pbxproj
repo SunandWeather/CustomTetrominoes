@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BAF2D3AC1E24885B00AD34B7 /* SDL2_rotozoom.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF2D3AA1E24885B00AD34B7 /* SDL2_rotozoom.c */; };
 		BAF4C67A1E2443D000AF24B9 /* CustomTetrominoes.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = BAF4C6791E2443D000AF24B9 /* CustomTetrominoes.1 */; };
 		BAF4C6821E2443F300AF24B9 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAF4C6801E2443F300AF24B9 /* SDL2_image.framework */; };
 		BAF4C6831E2443F300AF24B9 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAF4C6811E2443F300AF24B9 /* SDL2.framework */; };
@@ -30,6 +31,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BAF2D3AA1E24885B00AD34B7 /* SDL2_rotozoom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL2_rotozoom.c; sourceTree = "<group>"; };
+		BAF2D3AB1E24885B00AD34B7 /* SDL2_rotozoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDL2_rotozoom.h; sourceTree = "<group>"; };
 		BAF4C6741E2443D000AF24B9 /* CustomTetrominoes */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CustomTetrominoes; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAF4C6791E2443D000AF24B9 /* CustomTetrominoes.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = CustomTetrominoes.1; sourceTree = "<group>"; };
 		BAF4C6801E2443F300AF24B9 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
@@ -96,6 +99,8 @@
 				BAF4C6881E24443100AF24B9 /* main.c */,
 				BAF4C6951E24443100AF24B9 /* sprite.c */,
 				BAF4C6961E24443100AF24B9 /* sprite.h */,
+				BAF2D3AA1E24885B00AD34B7 /* SDL2_rotozoom.c */,
+				BAF2D3AB1E24885B00AD34B7 /* SDL2_rotozoom.h */,
 				BAF4C6891E24443100AF24B9 /* res */,
 			);
 			path = CustomTetrominoes;
@@ -172,6 +177,7 @@
 			files = (
 				BAF4C69A1E24443100AF24B9 /* sprite.c in Sources */,
 				BAF4C6971E24443100AF24B9 /* blocks.c in Sources */,
+				BAF2D3AC1E24885B00AD34B7 /* SDL2_rotozoom.c in Sources */,
 				BAF4C6981E24443100AF24B9 /* game.c in Sources */,
 				BAF4C6991E24443100AF24B9 /* main.c in Sources */,
 			);
@@ -291,6 +297,7 @@
 				BAF4C67F1E2443D000AF24B9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

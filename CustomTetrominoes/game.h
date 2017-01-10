@@ -1,6 +1,6 @@
 //
 //  game.h
-//  Tetris
+//  Custom Tetrominoes
 //
 //  Created by Johan Sunnanväder on 2017-01-03.
 //  Copyright (c) 2017 SunandWeather. All rights reserved.

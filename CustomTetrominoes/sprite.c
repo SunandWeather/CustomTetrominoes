@@ -1,6 +1,6 @@
 //
 //  sprite.c
-//  Tetris
+//  Custom Tetrominoes
 //
 //  Created by Johan Sunnanväder on 2016-12-31.
 //  Copyright (c) 2016 SunandWeather. All rights reserved.
@@ -49,7 +49,6 @@ void render_sprite(sprite * s, int x, int y, SDL_Renderer* r)
     rendRect.h = s->rect.h;
     
     SDL_RenderCopy(r, s->texture, &s->rect, &rendRect);
-//    printf("What?");
 }
 
 #include <stdio.h>
