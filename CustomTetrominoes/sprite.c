@@ -32,6 +32,7 @@ sprite *init_sprite(SDL_Texture* texture, int x, int y, int w, int h)
 // Free sprite
 void free_sprite(sprite* s)
 {
+    SDL_DestroyTexture(s->texture);
     free(s);
 }
 

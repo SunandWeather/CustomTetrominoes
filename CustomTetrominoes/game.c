@@ -13,7 +13,14 @@
 
 #include "Game.h"
 #include "sprite.h"
+#include "font.h"
+#include "Highscore.h"
+#include <SDL2_image/SDL_image.h>
 
+#define N 1000000000
+int grid[N];
+int tempGrid[N];
+int temptempGrid[N];
 
 int game_loop(gameData* data)
 {
@@ -29,46 +36,94 @@ int game_loop(gameData* data)
      8 = Walls
      9 = ground
      */
+
+    
+    /* Wait for start command */
+    
+    //Event handler
+    SDL_Event event;
+    
+    //Main loop flag
+    bool start = false;
+    
+    while (!start) {
+        
+        //Handle events on queue
+        while( SDL_PollEvent( &event ) != 0 )
+        {
+            //User requests quit
+            if( event.type == SDL_QUIT) {
+                return 1;
+            }
+            
+            if(((event.key.keysym.sym == SDLK_RETURN) && event.type == SDL_KEYDOWN)
+               || (event.key.keysym.sym == SDLK_SPACE && event.type == SDL_KEYUP))
+            {
+                start = true;
+            } else if (event.key.keysym.sym == SDLK_ESCAPE && event.type == SDL_KEYDOWN) {
+                return 1;
+            }
+        }
+        
+        int w;
+        int h;
+        SDL_GetWindowSize(data->window, &w, &h);
+        int xOffset = (w - data->WIDTH_IN_BLOCKS * data->BLOCK_WIDTH) / 2 - 1 * data->BLOCK_WIDTH;
+        int yOffset = (h - data->HEIGHT_IN_BLOCKS * data->BLOCK_HEIGHT) / 2;
+        SDL_RenderClear(data->renderer);
+        render_sprite(data->start, (data->WIDTH_IN_BLOCKS / 2 - 1) * data->BLOCK_WIDTH + xOffset,
+                      (data->HEIGHT_IN_BLOCKS / 2 - 1) * data->BLOCK_HEIGHT + yOffset, data->renderer);
+		SDL_RenderPresent(data->renderer);
+        
+        //Update the surface
+        SDL_UpdateWindowSurface(data->window);
+        
+        SDL_Delay(20);
+        
+    }
     
     //Initialize starting point of the blocks
     int STARTING_POINT_X = (data->WIDTH_IN_BLOCKS + 1) / 2 + 1;
     int STARTING_POINT_Y = 2;
     
-    //Setup main grid (2 blocks higher, 4 blocks wider)
-    int grid[data->WIDTH_IN_BLOCKS + 4][data->HIGHT_IN_BLOCKS + 2];
+    //Initialize matrix dimensions
+    int wMatrix = (data->WIDTH_IN_BLOCKS + 4);
+    int hMatrix = (data->HEIGHT_IN_BLOCKS + 2);
     
     //Setting grid values to 0 (free space), walls to 8 and ground to 9
     int i, j, k;
-    for (j = 0; j < data->HIGHT_IN_BLOCKS + 2; j++)
+    for (j = 0; j < data->HEIGHT_IN_BLOCKS + 2; j++)
     {
         for (i = 0; i < data->WIDTH_IN_BLOCKS + 4; i++)
         {
             if(i < 2 || i > (data->WIDTH_IN_BLOCKS + 1)){
-                grid[i][j] = 8;
-                //printf("%d\t", grid[i][j]);
-            } else if (j == data->HIGHT_IN_BLOCKS + 1){
-                grid[i][j] = 9;
-                //printf("%d\t", grid[i][j]);
+               grid[i * hMatrix + j] = 8;
+                //printf("%d\t",grid[i * hMatrix + j]);
             } else {
-                grid[i][j] = 0;
-                //printf("%d\t", grid[i][j]);
+               grid[i * hMatrix + j] = 0;
+                //printf("%d\t",grid[i * hMatrix + j]);
             }
+            
+            if (j == data->HEIGHT_IN_BLOCKS + 1){
+               grid[i * hMatrix + j] = 9;
+                //printf("%d\t",grid[i * hMatrix + j]);
+            }
+            
         }
     }
     
-    //Setup 2 temporary grids
-    int tempGrid[data->WIDTH_IN_BLOCKS + 4][data->HIGHT_IN_BLOCKS + 2];
-    int temptempGrid[data->WIDTH_IN_BLOCKS + 4][data->HIGHT_IN_BLOCKS + 2];
-    for (j = 0; j < data->HIGHT_IN_BLOCKS + 2; j++)
+    for (j = 0; j < data->HEIGHT_IN_BLOCKS + 2; j++)
     {
 
         for (i = 0; i < data->WIDTH_IN_BLOCKS + 4; i++)
         {
-            tempGrid[i][j] = 0;
-            temptempGrid[i][j] = 0;
+            tempGrid[i * hMatrix + j] = 0;
+            temptempGrid[i * hMatrix + j] = 0;
         }
     }
     
+    //Hiding mouse pointer
+    SDL_ShowCursor(SDL_DISABLE);
     
     /* INITIALIZING BLOCK INFORMATION */
     
@@ -131,6 +186,8 @@ int game_loop(gameData* data)
     
     double speedCorrection = 0.87;          //Compensating for processing time
     
+    int action;                             //Store the actions given at the high score input
+    
     //Main game loop
     while (game)
     {
@@ -145,6 +202,10 @@ int game_loop(gameData* data)
         
         speed = speeds[level] * speedCorrection;
         n = speed;
+        
+        if (score > 999999) {
+            score = 999999;
+        }
         
         sprintf(title, "Score: %d Level: %d Lines: %d", score, level, lines);
         SDL_SetWindowTitle(data->window, title);
@@ -180,10 +241,10 @@ int game_loop(gameData* data)
         block = get_block(current_x, current_y, orientation, move, type);
         
         //Adding blocks to tempGrid
-        tempGrid[block.x1][block.y1] = type;
-        tempGrid[block.x2][block.y2] = type;
-        tempGrid[block.x3][block.y3] = type;
-        tempGrid[block.x4][block.y4] = type;
+        tempGrid[block.x1 * hMatrix + block.y1] = type;
+        tempGrid[block.x2 * hMatrix + block.y2] = type;
+        tempGrid[block.x3 * hMatrix + block.y3] = type;
+        tempGrid[block.x4 * hMatrix + block.y4] = type;
         
         //////////////////////////////////////////////////////
         /* RENDERING BLOCKS AND COMPARING grid AND tempGrid */
@@ -191,31 +252,34 @@ int game_loop(gameData* data)
         
         SDL_RenderClear(data->renderer);
         
-        for (j = 1; j < data->HIGHT_IN_BLOCKS + 1; j++)
+        for (j = 1; j < data->HEIGHT_IN_BLOCKS + 2; j++)
         {
             for (i = 1; i < data->WIDTH_IN_BLOCKS + 3; i++)
             {
-                if (grid[i][j] > 0)
-                    render_blocks (i, j, *data, grid[i][j]);
-                if (tempGrid[i][j] > 0)
-                    render_blocks (i, j, *data, tempGrid[i][j]);
-                if (grid[i][j] > 0 && tempGrid[i][j] > 0) {
+                if(grid[i * hMatrix + j] > 0)
+                    render_blocks (i, j, *data,grid[i * hMatrix + j]);
+                if (tempGrid[i * hMatrix + j] > 0)
+                    render_blocks (i, j, *data, tempGrid[i * hMatrix + j]);
+                if(grid[i * hMatrix + j] > 0 && tempGrid[i * hMatrix + j] > 0) {
                     
                     ///////////////
                     /* GAME OVER */
                     ///////////////
                     
+                    //Show mouse pointer
+                    SDL_ShowCursor(SDL_ENABLE);
+                    
                     //Render tempGrid and grid
                     SDL_RenderClear(data->renderer);
                     
-                    for (j = 1; j < data->HIGHT_IN_BLOCKS + 1; j++)
+                    for (j = 1; j < data->HEIGHT_IN_BLOCKS + 2; j++)
                     {
                         for (i = 1; i < data->WIDTH_IN_BLOCKS + 3; i++)
                         {
-                            if (grid[i][j] > 0)
-                                render_blocks (i, j, *data, grid[i][j]);
-                            if (tempGrid[i][j] > 0)
-                                render_blocks (i, j, *data, tempGrid[i][j]);
+                            if(grid[i * hMatrix + j] > 0)
+                                render_blocks (i, j, *data,grid[i * hMatrix + j]);
+                            if (tempGrid[i * hMatrix + j] > 0)
+                                render_blocks (i, j, *data, tempGrid[i * hMatrix + j]);
                         }
                     }
                      
@@ -225,17 +289,54 @@ int game_loop(gameData* data)
                     
                     SDL_Delay(speed);
                     
+                    //Empty key queue
+                    while (SDL_PollEvent(&event)) { }
+                    
                     //////////////////////
                     /* GAME OVER SCREEN */
                     //////////////////////
                     
-                    SDL_RenderClear(data->renderer);
+                    //Hide game window
+                    SDL_HideWindow(data->window);
                     
-                    render_sprite(data->game_over, (data->WIDTH_IN_BLOCKS / 2 - 1) * data->BLOCK_HEIGHT,
-                                  (data->HIGHT_IN_BLOCKS / 2 - 1) * data->BLOCK_HEIGHT, data->renderer);
+                    if (!data->high_score_window_exist) {
+                        data->high_score_window_exist = create_high_score_window(data);
+                    } else {
+                        SDL_ShowWindow(data->menu_window);
+                    }
                     
-                    SDL_RenderPresent(data->renderer);
-                    SDL_UpdateWindowSurface(data->window);
+                    //Assigning title
+                    char title[256];
+                    sprintf(title, "Score: %d Level: %d Lines: %d", score, level, lines);
+                    SDL_SetWindowTitle(data->menu_window, title);
+                    
+                    action = render_highscore_input(score, lines, level, data);
+                    
+                    if (action == 10) {
+                        //Quit
+                        return 1;
+                    } else if (action == 18) {
+                        //Restart
+                        SDL_HideWindow(data->menu_window);
+                        SDL_ShowWindow(data->window);
+                        return 2;
+                    }
+                    
+                    //Show high score
+                    int mode;
+                    mode = 10000 * data->WIDTH_IN_BLOCKS + data->HEIGHT_IN_BLOCKS;
+                    
+                    action = show_high_score(data->menu_renderer, mode, *data, 2);
+                    
+                    if (action == 0 || action == 1) {
+                        //Quit
+                        return 1;
+                    } else if (action == 2) {
+                        //Restart
+                        SDL_HideWindow(data->menu_window);
+                        SDL_ShowWindow(data->window);
+                        return 2;
+                    }
                     
                     //Waiting for restart or quit
                     while(true)
@@ -251,6 +352,7 @@ int game_loop(gameData* data)
                                 return 2;
                             }
                         }
+                        SDL_Delay(30);
                     }
                 }
             }
@@ -281,6 +383,60 @@ int game_loop(gameData* data)
                     if( e.type == SDL_QUIT) {
                         //Quit Game
                         return 1;
+                        
+                    } else if (e.key.keysym.sym == SDLK_ESCAPE && e.type == SDL_KEYDOWN) {
+                        return 3;
+                    } else if (e.key.keysym.sym == SDLK_p && e.type == SDL_KEYDOWN) {
+                        bool paused = true;
+                        while (paused) {
+                            while( SDL_PollEvent( &e ) != 0) {
+                                if (e.type == SDL_QUIT) {
+                                    return 1;
+                                }
+                                if (e.key.keysym.sym == SDLK_p && e.type == SDL_KEYDOWN) {
+                                    paused = false;
+                                } else if (e.key.keysym.sym == SDLK_r && e.type == SDL_KEYDOWN) {
+                                    return 2;
+                                } else if (e.key.keysym.sym == SDLK_ESCAPE && e.type == SDL_KEYDOWN) {
+                                    return 1;
+                                }
+                            }
+                            //Render empty game
+                            SDL_RenderClear(data->renderer);
+                            
+                            for (j = 1; j < data->HEIGHT_IN_BLOCKS + 2; j++)
+                            {
+                                for (i = 1; i < data->WIDTH_IN_BLOCKS + 3; i++)
+                                {
+                                    if(grid[i * hMatrix + j] == 8 || grid[i * hMatrix + j] == 9)
+                                        render_blocks (i, j, *data,grid[i * hMatrix + j]);
+                                }
+                            }
+                            
+                            //Update the surface
+                            SDL_RenderPresent(data->renderer);
+                            SDL_UpdateWindowSurface(data->window);
+                            SDL_Delay(30);
+                        }
+                        
+                        //Render occupied grid
+                        SDL_RenderClear(data->renderer);
+                        
+                        for (j = 1; j < data->HEIGHT_IN_BLOCKS + 2; j++)
+                        {
+                            for (i = 1; i < data->WIDTH_IN_BLOCKS + 3; i++)
+                            {
+                                if(grid[i * hMatrix + j] > 0)
+                                    render_blocks (i, j, *data,grid[i * hMatrix + j]);
+                                if (tempGrid[i * hMatrix + j] > 0)
+                                    render_blocks (i, j, *data, tempGrid[i * hMatrix + j]);
+                            }
+                        }
+                        
+                        //Update the surface
+                        SDL_RenderPresent(data->renderer);
+                        SDL_UpdateWindowSurface(data->window);
+                        
                     } else if (e.key.keysym.sym == SDLK_r && e.type == SDL_KEYUP) {
                         return 2;
                     } else if ((e.key.keysym.sym == SDLK_LEFT && e.type == SDL_KEYDOWN)
@@ -318,21 +474,20 @@ int game_loop(gameData* data)
                         move = 0;
                         
                         //Add moved block to temptempGrid
-                        temptempGrid[block.x1][block.y1] = type;
-                        temptempGrid[block.x2][block.y2] = type;
-                        temptempGrid[block.x3][block.y3] = type;
-                        temptempGrid[block.x4][block.y4] = type;
+                        temptempGrid[block.x1 * hMatrix + block.y1] = type;
+                        temptempGrid[block.x2 * hMatrix + block.y2] = type;
+                        temptempGrid[block.x3 * hMatrix + block.y3] = type;
+                        temptempGrid[block.x4 * hMatrix + block.y4] = type;
                         
                         //Antifreeze
                         printf("");
                         
                         //Checking if the move is valid
-                        for (j = 0; j < data->HIGHT_IN_BLOCKS + 2; j++)
+                        for (j = current_y - 4; j < current_y + 4; j++)
                         {
-                            for (i = 0; i < data->WIDTH_IN_BLOCKS + 4; i++)
+                            for (i = current_x - 4; i < current_x + 4; i++)
                             {
-                                if (grid[i][j] > 0 && temptempGrid[i][j] > 0) {
-                                    
+                                if(grid[i * hMatrix + j] > 0 && temptempGrid[i * hMatrix + j] > 0) {
                                     
                                     //Invalid move
                                     valid = false;
@@ -342,13 +497,13 @@ int game_loop(gameData* data)
                                     //Antifreeze
                                     printf("");
                                     
-                                    temptempGrid[block.x1][block.y1] = 0;
-                                    temptempGrid[block.x2][block.y2] = 0;
-                                    temptempGrid[block.x3][block.y3] = 0;
-                                    temptempGrid[block.x4][block.y4] = 0;
+                                    temptempGrid[block.x1 * hMatrix + block.y1] = 0;
+                                    temptempGrid[block.x2 * hMatrix + block.y2] = 0;
+                                    temptempGrid[block.x3 * hMatrix + block.y3] = 0;
+                                    temptempGrid[block.x4 * hMatrix + block.y4] = 0;
                                     
                                     //exiting loops
-                                    i = data->HIGHT_IN_BLOCKS + 1;
+                                    i = data->HEIGHT_IN_BLOCKS + 1;
                                     j = data->WIDTH_IN_BLOCKS + 2;
                                     
                                     //Exiting mooving block loop and add a new block if block
@@ -359,16 +514,16 @@ int game_loop(gameData* data)
                                         block = get_block(current_x, current_y, orientation, move, type);
                                         down = false;
                                         
-                                        if (grid[block.x1][block.y1] > 0)
+                                        if (grid[block.x1 * hMatrix + block.y1] > 0)
                                             if (!block_include(block, block.x1, block.y1 + 1))
                                                 down = true;
-                                        if (grid[block.x2][block.y2] > 0)
+                                        if (grid[block.x2 * hMatrix + block.y2] > 0)
                                             if (!block_include(block, block.x2, block.y2) + 1)
                                                 down = true;
-                                        if (grid[block.x3][block.y3] > 0)
+                                        if (grid[block.x3 * hMatrix + block.y3] > 0)
                                             if (!block_include(block, block.x3, block.y3) + 1)
                                                 down = true;
-                                        if (grid[block.x4][block.y4] > 0)
+                                        if (grid[block.x4 * hMatrix + block.y4] > 0)
                                             if (!block_include(block, block.x3, block.y4) + 1)
                                                 down = true;
                                         
@@ -376,13 +531,13 @@ int game_loop(gameData* data)
                                             moving = false;
                                             
                                             //Merging tempGrid with grid
-                                            for (j = 0; j < data->HIGHT_IN_BLOCKS + 2; j++)
+                                            for (j = current_y - 4; j < current_y + 4; j++)
                                             {
-                                                for (i = 0; i < data->WIDTH_IN_BLOCKS + 4; i++)
+                                                for (i = current_x - 4; i < current_x + 4; i++)
                                                 {
-                                                    if (tempGrid[i][j] > 0) {
-                                                        grid[i][j] = tempGrid[i][j];
-                                                        tempGrid[i][j] = 0;
+                                                    if (tempGrid[i * hMatrix + j] > 0) {
+                                                       grid[i * hMatrix + j] = tempGrid[i * hMatrix + j];
+                                                        tempGrid[i * hMatrix + j] = 0;
                                                     }
                                                 }
                                             }
@@ -397,7 +552,7 @@ int game_loop(gameData* data)
                                     }
                                     
                                     //exiting loops
-                                    i = data->HIGHT_IN_BLOCKS + 1;
+                                    i = data->HEIGHT_IN_BLOCKS + 1;
                                     j = data->WIDTH_IN_BLOCKS + 2;
                                     
                                 }
@@ -416,37 +571,37 @@ int game_loop(gameData* data)
                             /* Copy temptempGrid to tempGrid and reset temptempGrid */
                             
                             //Resetting tempGrid to add moved block
-                            for (i = 0; i < data->HIGHT_IN_BLOCKS + 2; i++)
+                            for (j = current_y - 4; j < current_y + 4; j++)
                             {
-                                for (j = 0; j < data->WIDTH_IN_BLOCKS + 4; j++)
+                                for (i = current_x - 4; i < current_x + 4; i++)
                                 {
-                                    tempGrid[j][i] = 0;
+                                    tempGrid[i * hMatrix + j] = 0;                  
                                 }
                             }
                             
                             //Adding moved block to tempGrid
-                            tempGrid[block.x1][block.y1] = type;
-                            tempGrid[block.x2][block.y2] = type;
-                            tempGrid[block.x3][block.y3] = type;
-                            tempGrid[block.x4][block.y4] = type;
+                            tempGrid[block.x1 * hMatrix + block.y1] = type;
+                            tempGrid[block.x2 * hMatrix + block.y2] = type;
+                            tempGrid[block.x3 * hMatrix + block.y3] = type;
+                            tempGrid[block.x4 * hMatrix + block.y4] = type;
                             
                             //Resetting temptempGrid
-                            temptempGrid[block.x1][block.y1] = 0;
-                            temptempGrid[block.x2][block.y2] = 0;
-                            temptempGrid[block.x3][block.y3] = 0;
-                            temptempGrid[block.x4][block.y4] = 0;
+                            temptempGrid[block.x1 * hMatrix + block.y1] = 0;
+                            temptempGrid[block.x2 * hMatrix + block.y2] = 0;
+                            temptempGrid[block.x3 * hMatrix + block.y3] = 0;
+                            temptempGrid[block.x4 * hMatrix + block.y4] = 0;
                             
                             //Render tempGrid and grid
                             SDL_RenderClear(data->renderer);
                             
-                            for (j = 1; j < data->HIGHT_IN_BLOCKS + 1; j++)
+                            for (j = 1; j < data->HEIGHT_IN_BLOCKS + 2; j++)
                             {
                                 for (i = 1; i < data->WIDTH_IN_BLOCKS + 3; i++)
                                 {
-                                    if (grid[i][j] > 0)
-                                        render_blocks (i, j, *data, grid[i][j]);
-                                    if (tempGrid[i][j] > 0)
-                                        render_blocks (i, j, *data, tempGrid[i][j]);
+                                    if(grid[i * hMatrix + j] > 0)
+                                        render_blocks (i, j, *data,grid[i * hMatrix + j]);
+                                    if (tempGrid[i * hMatrix + j] > 0)
+                                        render_blocks (i, j, *data, tempGrid[i * hMatrix + j]);
                                 }
                             }
                             
@@ -477,11 +632,11 @@ int game_loop(gameData* data)
         //////////////////////////////////
         
         
-        for (j = 0; j < data->HIGHT_IN_BLOCKS; j++) {
+        for (j = 0; j < data->HEIGHT_IN_BLOCKS; j++) {
             i = 0;
             
             while (rowOccupied) {
-                if (grid[i + 2][j + 1] == 0) {
+                if (grid[(i + 2) * hMatrix + (j + 1)] == 0) {
                     rowOccupied = false;
                 break;
                 }
@@ -508,7 +663,7 @@ int game_loop(gameData* data)
             {
                 for (i = 2; i < data->WIDTH_IN_BLOCKS + 2; i++)
                 {
-                    grid[i][(rows[k] - j)] = grid[i][(rows[k] - j) - 1];
+                    grid[i * hMatrix + (rows[k] - j)] = grid[i * hMatrix + ((rows[k] - j) - 1)];
                 }
             }
         }
@@ -541,22 +696,37 @@ int decrease_orientation(int orientation) {
 }
 
 void render_blocks (int x, int y, gameData data, int type) {
+    
+    //Center the game
+    int xOffset = 0;
+    int yOffset = 0;
+    int w;
+    int h;
+    
+    SDL_GetWindowSize(data.window, &w, &h);
+    
+    xOffset = (w - data.WIDTH_IN_BLOCKS * data.BLOCK_WIDTH) / 2 - 1 * data.BLOCK_WIDTH;
+    yOffset = (h - data.HEIGHT_IN_BLOCKS * data.BLOCK_HEIGHT) / 2;
+    
+    //Render
     if (type == 1)
-        render_sprite(data.l, (x - 1) * data.BLOCK_WIDTH, (y - 1) * data.BLOCK_HEIGHT, data.renderer);
-    if (type == 2)
-        render_sprite(data.L, (x - 1) * data.BLOCK_WIDTH, (y - 1) * data.BLOCK_HEIGHT, data.renderer);
-    if (type == 3)
-        render_sprite(data.O, (x - 1) * data.BLOCK_WIDTH, (y - 1) * data.BLOCK_HEIGHT, data.renderer);
-    if (type == 4)
-        render_sprite(data.J, (x - 1) * data.BLOCK_WIDTH, (y - 1) * data.BLOCK_HEIGHT, data.renderer);
-    if (type == 5)
-        render_sprite(data.Z, (x - 1) * data.BLOCK_WIDTH, (y - 1) * data.BLOCK_HEIGHT, data.renderer);
-    if (type == 6)
-        render_sprite(data.S, (x - 1) * data.BLOCK_WIDTH, (y - 1) * data.BLOCK_HEIGHT, data.renderer);
-    if (type == 7)
-        render_sprite(data.T, (x - 1) * data.BLOCK_WIDTH, (y - 1) * data.BLOCK_HEIGHT, data.renderer);
-    if (type == 8)
-        render_sprite(data.wall, (x - 1) * data.BLOCK_WIDTH, (y - 1) * data.BLOCK_HEIGHT, data.renderer);
+        render_sprite(data.I, (x - 1) * data.BLOCK_WIDTH + xOffset, (y - 1) * data.BLOCK_HEIGHT + yOffset, data.renderer);
+    else if (type == 2)
+        render_sprite(data.L, (x - 1) * data.BLOCK_WIDTH + xOffset, (y - 1) * data.BLOCK_HEIGHT + yOffset, data.renderer);
+    else if (type == 3)
+        render_sprite(data.O, (x - 1) * data.BLOCK_WIDTH + xOffset, (y - 1) * data.BLOCK_HEIGHT + yOffset, data.renderer);
+    else if (type == 4)
+        render_sprite(data.J, (x - 1) * data.BLOCK_WIDTH + xOffset, (y - 1) * data.BLOCK_HEIGHT + yOffset, data.renderer);
+    else if (type == 5)
+        render_sprite(data.Z, (x - 1) * data.BLOCK_WIDTH + xOffset, (y - 1) * data.BLOCK_HEIGHT + yOffset, data.renderer);
+    else if (type == 6)
+        render_sprite(data.S, (x - 1) * data.BLOCK_WIDTH + xOffset, (y - 1) * data.BLOCK_HEIGHT + yOffset, data.renderer);
+    else if (type == 7)
+        render_sprite(data.T, (x - 1) * data.BLOCK_WIDTH + xOffset, (y - 1) * data.BLOCK_HEIGHT + yOffset, data.renderer);
+    else if (type == 8)
+        render_sprite(data.wall, (x - 1) * data.BLOCK_WIDTH + xOffset, (y - 1) * data.BLOCK_HEIGHT + yOffset, data.renderer);
+    else if (type == 9)
+        render_sprite(data.ground, (x - 1) * data.BLOCK_WIDTH + xOffset, (y - 1) * data.BLOCK_HEIGHT + yOffset, data.renderer);
 }
 
 int get_score(int score, int drop, int level, int rowListTracker) {
@@ -591,3 +761,287 @@ bool block_include(blocks block, int x, int y) {
     
     return include;
 }
+
+bool create_high_score_window(gameData *data) {
+    //Create window
+    data->menu_window = SDL_CreateWindow( "", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, data->MENU_SCREEN_WIDTH, data->MENU_SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    if(data->menu_window == NULL)
+    {
+        printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
+        SDL_DestroyWindow(data->menu_window);
+        SDL_Quit();
+        return false;
+    }
+    
+    //Create renderer for window
+    data->menu_renderer = SDL_CreateRenderer(data->menu_window, -1, SDL_RENDERER_ACCELERATED );
+    if(data->menu_renderer == NULL)
+    {
+        printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
+        SDL_DestroyWindow(data->menu_window);
+        SDL_Quit();
+        return false;
+    }
+    
+    //Reinitializing sprites
+//    char font_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/font.png";
+//    char fader_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/fader.png";
+    
+    char font_path[256] = "res/font.png";
+    char fader_path[256] = "res/fader.png";
+    
+    //Initializing font for
+    for (int i = 0; i < data->FONT_CHARACTERS; i++) {
+        SDL_Surface* surface = malloc(sizeof(surface));
+        surface = IMG_Load(font_path);
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(data->menu_renderer, surface);
+        SDL_FreeSurface(surface);
+        data->menu_font[i] = init_sprite(texture, i * data->FONT_WIDTH, 0, data->FONT_WIDTH, data->FONT_HEIGHT);
+    }
+    
+    //Reinitializing fader
+    SDL_Surface* surface = malloc(sizeof(surface));
+    surface = IMG_Load(fader_path);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(data->menu_renderer, surface);
+    SDL_FreeSurface(surface);
+    data->menu_fader = init_sprite(texture, 0, 0, data->MENU_SCREEN_WIDTH, data->MENU_SCREEN_HEIGHT);
+    SDL_SetTextureAlphaMod(data->menu_fader->texture, 150);
+    
+    
+    return true;
+}
+
+
+
+int render_highscore_input(int score, int lines, int level, gameData* data) {
+    
+    char scoreString[256];
+    char levelString[256];
+    char linesString[256];
+    
+    char characters[40] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .-";
+    
+    char name[4] = {'A'};
+    int pos = 0;
+    int counter = 0;
+    
+    sprintf(scoreString, "SCORE: %d", score);
+    sprintf(levelString, "LEVEL: %d", level);
+    sprintf(linesString, "LINES: %d", lines);
+    
+    while (pos != 9) {
+        
+        SDL_RenderClear(data->menu_renderer);
+    
+        render_font(&name[0], 303, 300, data->menu_renderer, data->FONT_WIDTH, data->FONT_HEIGHT, data->menu_font);
+        render_font(&name[1], 314, 300, data->menu_renderer, data->FONT_WIDTH, data->FONT_HEIGHT, data->menu_font);
+        render_font(&name[2], 325, 300, data->menu_renderer, data->FONT_WIDTH, data->FONT_HEIGHT, data->menu_font);
+        
+        render_sprite(data->menu_fader, 0, 0, data->menu_renderer);
+        
+        render_font("--GAME OVER--", 248, 50, data->menu_renderer, data->FONT_WIDTH, data->FONT_HEIGHT, data->menu_font);
+        render_font(scoreString, 75, 100, data->menu_renderer, data->FONT_WIDTH, data->FONT_HEIGHT, data->menu_font);
+        render_font(levelString, 75, 140, data->menu_renderer, data->FONT_WIDTH, data->FONT_HEIGHT, data->menu_font);
+        render_font(linesString, 75, 180, data->menu_renderer, data->FONT_WIDTH, data->FONT_HEIGHT, data->menu_font);
+        
+        render_font("--SUBMIT SCORE--", 234, 230, data->menu_renderer, data->FONT_WIDTH, data->FONT_HEIGHT, data->menu_font);
+        render_font("PRESS 'R' TO RETRY, OR 'ESCAPE' TO QUIT", 105, 380, data->menu_renderer, data->FONT_WIDTH, data->FONT_HEIGHT, data->menu_font);
+        
+        //Render active character
+        render_font("\a", 303 + pos * data->FONT_WIDTH, 300 - 25, data->menu_renderer, data->FONT_WIDTH, data->FONT_HEIGHT, data->menu_font);
+        render_font(&name[pos], 303 + pos * data->FONT_WIDTH, 300, data->menu_renderer, data->FONT_WIDTH, data->FONT_HEIGHT, data->menu_font);
+        render_font("\v", 303 + pos * data->FONT_WIDTH, 300 + 25, data->menu_renderer, data->FONT_WIDTH, data->FONT_HEIGHT, data->menu_font);
+        
+        //Update the surface
+        SDL_RenderPresent(data->menu_renderer);
+        SDL_UpdateWindowSurface(data->menu_window);
+    
+        pos = enter_name(name, pos, &counter, characters);
+        
+        if (pos == 18) {
+            return 18;
+        } else if (pos == 10) {
+            return 10;
+        }
+        
+    }
+    
+    //Submitting high score
+    int game_mode = data->WIDTH_IN_BLOCKS * 10000 + data->HEIGHT_IN_BLOCKS;
+    enter_highscore(score, name, game_mode);
+    
+    return 1;
+    
+}
+
+int enter_name(char name[], int pos, int *counter, char characters[]) {
+    
+    int count = 0;
+    
+    //Event handler
+    SDL_Event event;
+    
+    //Main loop flag
+    bool exit = false;
+    
+    while (!exit) {
+        
+        //Handle events on queue
+        while( SDL_PollEvent( &event ) != 0 )
+        {
+            //User requests quit
+            if( event.type == SDL_QUIT)
+            {
+                return 10;
+            }
+            
+            if (event.key.keysym.sym == SDLK_ESCAPE) {
+                exit = true;
+                return 10;
+            } else if ((event.key.keysym.sym == SDLK_r) && event.type == SDL_KEYDOWN) {
+                return 18;
+            } else if ((event.key.keysym.sym == SDLK_DOWN) && event.type == SDL_KEYDOWN) {
+                *counter = *counter + 1;
+                if (*counter == (int) strlen(characters)) {
+                    *counter = 0;
+                }
+                name[pos] = characters[*counter];
+                return pos;
+                
+            } else if ((event.key.keysym.sym == SDLK_UP) && event.type == SDL_KEYDOWN) {
+                if (*counter == 0) {
+                    *counter = (int) strlen(characters) - 1;
+                } else {
+                   *counter = *counter - 1;
+                }
+                name[pos] = characters[*counter];
+                return pos;
+            } else if ((event.key.keysym.sym == SDLK_LEFT) && event.type == SDL_KEYDOWN) {
+                name[pos] = '\0';
+                if (pos > 0)
+                    pos = pos - 1;
+                return pos;
+            } else if ((event.key.keysym.sym == SDLK_RIGHT) && event.type == SDL_KEYDOWN) {
+                if (pos < 2)
+                    pos++;
+                name[pos] = characters[*counter];
+                return pos;
+            } else if (((event.key.keysym.sym == SDLK_RETURN) && event.type == SDL_KEYDOWN)
+                       || (event.key.keysym.sym == SDLK_SPACE && event.type == SDL_KEYDOWN)) {
+                if (pos == 2) {
+                    exit = true;
+                    break;
+                } else {
+                    pos++;
+                    name[pos] = characters[*counter];
+                    return pos;
+                }
+            }
+            
+        }
+        
+        //Delay
+        SDL_Delay(50);
+        if (count == 10) {
+            return pos;
+        } else {
+            count++;
+        }
+        
+    }
+    return 9;
+}
+
+int show_high_score(SDL_Renderer* r, int mode, gameData data, int menu) {
+    
+    SDL_Event e;
+    while (SDL_PollEvent(&e) != 0) {}
+    
+	bool running = true;
+    
+	char list[256];
+    for (int i = 0; i < 256; i++) {
+		list[i] = 0;
+	}
+    
+	get_highscore(list, mode);
+	int entries = 0;
+    
+	// Count the number of entries in the list
+	for (int i = 0; i < 256; i++) {
+		if (list[i] == ';')
+			entries++;
+	}
+    
+	while (running) {
+        
+		while (SDL_PollEvent(&e) != 0) {
+            //User requests quit
+			if (e.type == SDL_QUIT) {
+				return 0;
+			} else if (e.key.keysym.sym == SDLK_ESCAPE && e.type == SDL_KEYDOWN) {
+                return 1;
+            } else if ((e.key.keysym.sym == SDLK_RETURN && e.type == SDL_KEYDOWN)
+                        || (e.key.keysym.sym == SDLK_r && e.type == SDL_KEYDOWN)) {
+                return 2;
+            }
+        }
+        
+		SDL_RenderClear(r);
+        
+        char high_score_title[256];
+        
+        
+        sprintf(high_score_title, "HIGH SCORE - %04d X %04d", data.WIDTH_IN_BLOCKS, data.HEIGHT_IN_BLOCKS);
+        
+        if (menu == 1) {
+            render_font(high_score_title, 193, 50, r, data.FONT_WIDTH, data.FONT_HEIGHT, data.font);
+        } else {
+            render_font(high_score_title, 193, 50, r, data.FONT_WIDTH, data.FONT_HEIGHT, data.menu_font);
+        }
+        
+		char temp[16] = { 0 };
+        char position[12];
+        int xadd = 0;
+		for (int i = 0; i < 10; i++) {
+			if (i < entries) {
+				memcpy(temp, &(list[i * 12 + i]), 12);
+                sprintf(position, "%d.", i + 1);
+                if (i == 9)
+                    xadd = 1;
+                if (menu == 1) {
+                    render_font(position, 200 - (11 * xadd), 115 + i * 30, r, data.FONT_WIDTH, data.FONT_HEIGHT, data.font);
+                    render_font(temp, 237, 115 + i * 30, r, data.FONT_WIDTH, data.FONT_HEIGHT, data.font);
+                } else {
+                    render_font(position, 200 - (11 * xadd), 115 + i * 30, r, data.FONT_WIDTH, data.FONT_HEIGHT, data.menu_font);
+                    render_font(temp, 237, 115 + i * 30, r, data.FONT_WIDTH, data.FONT_HEIGHT, data.menu_font);
+                }
+                xadd = 0;
+			} else {
+                if (menu == 1) {
+                    render_font("-", 314, 115 + i * 30, r, data.FONT_WIDTH, data.FONT_HEIGHT, data.font);
+                } else {
+                    render_font("-", 314, 115 + i * 30, r, data.FONT_WIDTH, data.FONT_HEIGHT, data.menu_font);
+                }
+			}
+		}
+        
+		SDL_RenderPresent(r);
+        
+        //Delay
+        SDL_Delay(20);
+        
+	}
+    
+    return 1;
+}
+
+
+
+
+
+
+
+
+
+
