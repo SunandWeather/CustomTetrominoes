@@ -8,16 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		BA259B352567358C00BE1E08 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA259B342567358C00BE1E08 /* SDL2.framework */; };
-		BA9988F91E500FE40019EE28 /* highscore.c in Sources */ = {isa = PBXBuildFile; fileRef = BA9988F81E500FE40019EE28 /* highscore.c */; };
+		BA8A05C825AD3FFE0049CDA4 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = BA8A05BB25AD3FFD0049CDA4 /* main.c */; };
+		BA8A05C925AD3FFE0049CDA4 /* game.c in Sources */ = {isa = PBXBuildFile; fileRef = BA8A05BD25AD3FFD0049CDA4 /* game.c */; };
+		BA8A05CA25AD3FFE0049CDA4 /* font.c in Sources */ = {isa = PBXBuildFile; fileRef = BA8A05BE25AD3FFD0049CDA4 /* font.c */; };
+		BA8A05CB25AD3FFE0049CDA4 /* Highscore.c in Sources */ = {isa = PBXBuildFile; fileRef = BA8A05C025AD3FFE0049CDA4 /* Highscore.c */; };
+		BA8A05CC25AD3FFE0049CDA4 /* blocks.c in Sources */ = {isa = PBXBuildFile; fileRef = BA8A05C325AD3FFE0049CDA4 /* blocks.c */; };
+		BA8A05CD25AD3FFE0049CDA4 /* SDL2_rotozoom.c in Sources */ = {isa = PBXBuildFile; fileRef = BA8A05C525AD3FFE0049CDA4 /* SDL2_rotozoom.c */; };
+		BA8A05CE25AD3FFE0049CDA4 /* sprite.c in Sources */ = {isa = PBXBuildFile; fileRef = BA8A05C725AD3FFE0049CDA4 /* sprite.c */; };
 		BA9988FC1E5010C90019EE28 /* SDL2_net.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA9988FB1E5010C90019EE28 /* SDL2_net.framework */; };
-		BA9B13E91E4680AA00900A8B /* font.c in Sources */ = {isa = PBXBuildFile; fileRef = BA9B13E81E4680AA00900A8B /* font.c */; };
-		BAF2D3AC1E24885B00AD34B7 /* SDL2_rotozoom.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF2D3AA1E24885B00AD34B7 /* SDL2_rotozoom.c */; };
-		BAF4C67A1E2443D000AF24B9 /* CustomTetrominoes.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = BAF4C6791E2443D000AF24B9 /* CustomTetrominoes.1 */; };
 		BAF4C6821E2443F300AF24B9 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAF4C6801E2443F300AF24B9 /* SDL2_image.framework */; };
-		BAF4C6971E24443100AF24B9 /* blocks.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF4C6841E24443100AF24B9 /* blocks.c */; };
-		BAF4C6981E24443100AF24B9 /* game.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF4C6861E24443100AF24B9 /* game.c */; };
-		BAF4C6991E24443100AF24B9 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF4C6881E24443100AF24B9 /* main.c */; };
-		BAF4C69A1E24443100AF24B9 /* sprite.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF4C6951E24443100AF24B9 /* sprite.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,7 +26,6 @@
 			dstPath = /usr/share/man/man1;
 			dstSubfolderSpec = 0;
 			files = (
-				BAF4C67A1E2443D000AF24B9 /* CustomTetrominoes.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -35,25 +33,24 @@
 
 /* Begin PBXFileReference section */
 		BA259B342567358C00BE1E08 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../Skrivbord/Verktyg/Programmering/SDL2.framework; sourceTree = "<group>"; };
-		BA7DD77425A3EF9D0039C4D3 /* font.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = font.h; sourceTree = "<group>"; };
-		BA8A05B825AD3DC90049CDA4 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
-		BA9988F81E500FE40019EE28 /* highscore.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = highscore.c; sourceTree = "<group>"; };
-		BA9988FA1E500FF60019EE28 /* highscore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = highscore.h; sourceTree = "<group>"; };
+		BA8A05BA25AD3FFD0049CDA4 /* Highscore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Highscore.h; sourceTree = SOURCE_ROOT; };
+		BA8A05BB25AD3FFD0049CDA4 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = SOURCE_ROOT; };
+		BA8A05BC25AD3FFD0049CDA4 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = SOURCE_ROOT; };
+		BA8A05BD25AD3FFD0049CDA4 /* game.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = game.c; sourceTree = SOURCE_ROOT; };
+		BA8A05BE25AD3FFD0049CDA4 /* font.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = font.c; sourceTree = SOURCE_ROOT; };
+		BA8A05BF25AD3FFD0049CDA4 /* sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sprite.h; sourceTree = SOURCE_ROOT; };
+		BA8A05C025AD3FFE0049CDA4 /* Highscore.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Highscore.c; sourceTree = SOURCE_ROOT; };
+		BA8A05C125AD3FFE0049CDA4 /* blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blocks.h; sourceTree = SOURCE_ROOT; };
+		BA8A05C225AD3FFE0049CDA4 /* SDL2_rotozoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDL2_rotozoom.h; sourceTree = SOURCE_ROOT; };
+		BA8A05C325AD3FFE0049CDA4 /* blocks.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = blocks.c; sourceTree = SOURCE_ROOT; };
+		BA8A05C425AD3FFE0049CDA4 /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = SOURCE_ROOT; };
+		BA8A05C525AD3FFE0049CDA4 /* SDL2_rotozoom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL2_rotozoom.c; sourceTree = SOURCE_ROOT; };
+		BA8A05C625AD3FFE0049CDA4 /* font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = font.h; sourceTree = SOURCE_ROOT; };
+		BA8A05C725AD3FFE0049CDA4 /* sprite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sprite.c; sourceTree = SOURCE_ROOT; };
 		BA9988FB1E5010C90019EE28 /* SDL2_net.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_net.framework; path = ../../../../../Library/Frameworks/SDL2_net.framework; sourceTree = "<group>"; };
-		BA9B13E81E4680AA00900A8B /* font.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = font.c; sourceTree = "<group>"; };
-		BAF2D3AA1E24885B00AD34B7 /* SDL2_rotozoom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL2_rotozoom.c; sourceTree = "<group>"; };
-		BAF2D3AB1E24885B00AD34B7 /* SDL2_rotozoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDL2_rotozoom.h; sourceTree = "<group>"; };
 		BAF4C6741E2443D000AF24B9 /* CustomTetrominoes */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CustomTetrominoes; sourceTree = BUILT_PRODUCTS_DIR; };
-		BAF4C6791E2443D000AF24B9 /* CustomTetrominoes.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = CustomTetrominoes.1; sourceTree = "<group>"; };
 		BAF4C6801E2443F300AF24B9 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		BAF4C6811E2443F300AF24B9 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
-		BAF4C6841E24443100AF24B9 /* blocks.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = blocks.c; sourceTree = "<group>"; };
-		BAF4C6851E24443100AF24B9 /* blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blocks.h; sourceTree = "<group>"; };
-		BAF4C6861E24443100AF24B9 /* game.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = game.c; sourceTree = "<group>"; };
-		BAF4C6871E24443100AF24B9 /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = "<group>"; };
-		BAF4C6881E24443100AF24B9 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		BAF4C6951E24443100AF24B9 /* sprite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sprite.c; sourceTree = "<group>"; };
-		BAF4C6961E24443100AF24B9 /* sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sprite.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,21 +98,20 @@
 		BAF4C6761E2443D000AF24B9 /* CustomTetrominoes */ = {
 			isa = PBXGroup;
 			children = (
-				BAF4C6791E2443D000AF24B9 /* CustomTetrominoes.1 */,
-				BAF4C6841E24443100AF24B9 /* blocks.c */,
-				BAF4C6851E24443100AF24B9 /* blocks.h */,
-				BA9B13E81E4680AA00900A8B /* font.c */,
-				BA7DD77425A3EF9D0039C4D3 /* font.h */,
-				BAF4C6871E24443100AF24B9 /* game.h */,
-				BAF4C6861E24443100AF24B9 /* game.c */,
-				BAF4C6881E24443100AF24B9 /* main.c */,
-				BA9988F81E500FE40019EE28 /* highscore.c */,
-				BA9988FA1E500FF60019EE28 /* highscore.h */,
-				BAF4C6961E24443100AF24B9 /* sprite.h */,
-				BA8A05B825AD3DC90049CDA4 /* res */,
-				BAF4C6951E24443100AF24B9 /* sprite.c */,
-				BAF2D3AA1E24885B00AD34B7 /* SDL2_rotozoom.c */,
-				BAF2D3AB1E24885B00AD34B7 /* SDL2_rotozoom.h */,
+				BA8A05C325AD3FFE0049CDA4 /* blocks.c */,
+				BA8A05C125AD3FFE0049CDA4 /* blocks.h */,
+				BA8A05BE25AD3FFD0049CDA4 /* font.c */,
+				BA8A05C625AD3FFE0049CDA4 /* font.h */,
+				BA8A05BD25AD3FFD0049CDA4 /* game.c */,
+				BA8A05C425AD3FFE0049CDA4 /* game.h */,
+				BA8A05C025AD3FFE0049CDA4 /* Highscore.c */,
+				BA8A05BA25AD3FFD0049CDA4 /* Highscore.h */,
+				BA8A05BB25AD3FFD0049CDA4 /* main.c */,
+				BA8A05BC25AD3FFD0049CDA4 /* res */,
+				BA8A05C525AD3FFE0049CDA4 /* SDL2_rotozoom.c */,
+				BA8A05C225AD3FFE0049CDA4 /* SDL2_rotozoom.h */,
+				BA8A05C725AD3FFE0049CDA4 /* sprite.c */,
+				BA8A05BF25AD3FFD0049CDA4 /* sprite.h */,
 			);
 			path = CustomTetrominoes;
 			sourceTree = "<group>";
@@ -171,13 +167,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BAF4C69A1E24443100AF24B9 /* sprite.c in Sources */,
-				BAF4C6971E24443100AF24B9 /* blocks.c in Sources */,
-				BAF2D3AC1E24885B00AD34B7 /* SDL2_rotozoom.c in Sources */,
-				BAF4C6981E24443100AF24B9 /* game.c in Sources */,
-				BA9988F91E500FE40019EE28 /* highscore.c in Sources */,
-				BA9B13E91E4680AA00900A8B /* font.c in Sources */,
-				BAF4C6991E24443100AF24B9 /* main.c in Sources */,
+				BA8A05CE25AD3FFE0049CDA4 /* sprite.c in Sources */,
+				BA8A05CB25AD3FFE0049CDA4 /* Highscore.c in Sources */,
+				BA8A05C825AD3FFE0049CDA4 /* main.c in Sources */,
+				BA8A05CC25AD3FFE0049CDA4 /* blocks.c in Sources */,
+				BA8A05CA25AD3FFE0049CDA4 /* font.c in Sources */,
+				BA8A05C925AD3FFE0049CDA4 /* game.c in Sources */,
+				BA8A05CD25AD3FFE0049CDA4 /* SDL2_rotozoom.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
