@@ -14,6 +14,14 @@
 blocks get_block(int x, int y, int orientation, int move, int type)
 {
     blocks block;
+    block.x1 = 0;
+    block.y1 = 0;
+    block.x2 = 0;
+    block.y2 = 0;
+    block.x3 = 0;
+    block.y3 = 0;
+    block.x4 = 0;
+    block.y4 = 0;
     
     if (type == 1) {            //I-block
     

@@ -11,13 +11,13 @@
 #include "stdbool.h"
 #include "time.h"
 
-#include "Game.h"
+#include "game.h"
 #include "sprite.h"
 #include "font.h"
-#include "Highscore.h"
+#include "highscore.h"
 #include <SDL2_image/SDL_image.h>
 
-#define N 1000000000
+#define N 100000000
 int grid[N];
 int tempGrid[N];
 int temptempGrid[N];
@@ -37,17 +37,17 @@ int game_loop(gameData* data)
      9 = ground
      */
 
-    
+
     /* Wait for start command */
-    
+
     //Event handler
     SDL_Event event;
-    
+
     //Main loop flag
     bool start = false;
-    
+
     while (!start) {
-        
+
         //Handle events on queue
         while( SDL_PollEvent( &event ) != 0 )
         {
@@ -55,7 +55,7 @@ int game_loop(gameData* data)
             if( event.type == SDL_QUIT) {
                 return 1;
             }
-            
+
             if(((event.key.keysym.sym == SDLK_RETURN) && event.type == SDL_KEYDOWN)
                || (event.key.keysym.sym == SDLK_SPACE && event.type == SDL_KEYUP))
             {
@@ -64,7 +64,7 @@ int game_loop(gameData* data)
                 return 1;
             }
         }
-        
+
         int w;
         int h;
         SDL_GetWindowSize(data->window, &w, &h);
@@ -73,23 +73,23 @@ int game_loop(gameData* data)
         SDL_RenderClear(data->renderer);
         render_sprite(data->start, (data->WIDTH_IN_BLOCKS / 2 - 1) * data->BLOCK_WIDTH + xOffset,
                       (data->HEIGHT_IN_BLOCKS / 2 - 1) * data->BLOCK_HEIGHT + yOffset, data->renderer);
-		SDL_RenderPresent(data->renderer);
-        
+        SDL_RenderPresent(data->renderer);
+
         //Update the surface
         SDL_UpdateWindowSurface(data->window);
-        
+
         SDL_Delay(20);
-        
+
     }
-    
+
     //Initialize starting point of the blocks
     int STARTING_POINT_X = (data->WIDTH_IN_BLOCKS + 1) / 2 + 1;
     int STARTING_POINT_Y = 2;
-    
+
     //Initialize matrix dimensions
-    int wMatrix = (data->WIDTH_IN_BLOCKS + 4);
+    //int wMatrix = (data->WIDTH_IN_BLOCKS + 4);
     int hMatrix = (data->HEIGHT_IN_BLOCKS + 2);
-    
+
     //Setting grid values to 0 (free space), walls to 8 and ground to 9
     int i, j, k;
     for (j = 0; j < data->HEIGHT_IN_BLOCKS + 2; j++)
@@ -103,15 +103,15 @@ int game_loop(gameData* data)
                grid[i * hMatrix + j] = 0;
                 //printf("%d\t",grid[i * hMatrix + j]);
             }
-            
+
             if (j == data->HEIGHT_IN_BLOCKS + 1){
                grid[i * hMatrix + j] = 9;
                 //printf("%d\t",grid[i * hMatrix + j]);
             }
-            
+
         }
     }
-    
+
     for (j = 0; j < data->HEIGHT_IN_BLOCKS + 2; j++)
     {
 
@@ -121,98 +121,98 @@ int game_loop(gameData* data)
             temptempGrid[i * hMatrix + j] = 0;
         }
     }
-    
+
     //Hiding mouse pointer
     SDL_ShowCursor(SDL_DISABLE);
-    
+
     /* INITIALIZING BLOCK INFORMATION */
-    
+
     srand(time(NULL));                      //Used to randomize blocks
-    
+
     char title[64];                         //Title array
-    
+
     bool reset;                             //Reset flag
-    
+
     bool game = true;                       //Flag for wether the game is on
-    
+
     int current_x = STARTING_POINT_X;       //Tracker for the center tile of the blocks
     int current_y = STARTING_POINT_Y;
-    
+
     int orientation = 1;                    //Tracker of orientation of the center block
-    
+
     int type;                           //Tracker of block type for current block
-    
+
     int types = 7;                          //Number of different blocks
-    
+
     int move = 0;                           //Move LEFT (1) or RIGHT (2)
-    
+
     blocks block;                           //Block data
-    
+
     bool down;                              //Flag for when the block should be moved down
-    
+
     bool moving = true;                     //Flag for moving block
-    
+
     int speed = 887;                       //Speed of loop (in ms)
-    
+
     int n = speed;                            //Loop n times before exiting loop
                                             //(n times to check input before block decends)
-    
+
     SDL_Event e;                            //Event handler
-    
+
     bool valid;                             //Valid move flag
-    
+
     bool rowOccupied;                       //Tracks if a row is occupied when checking if a row
                                             //should be removed
-    
+
     int tileCounter;                        //Counting occupied tiles when rows may be removed
-    
+
     int rows[4];                            //Tracking rows to be removed
-    
+
     int rowListTracker = 0;                 //Tracking position in rows
-    
+
     int score = 1;                          //Keeps track of the score
-    
+
     int level = 0;                          //Keeps Track of level
-    
+
     int lines = 0;                          //Keeps track of lines
-    
+
     int drop = 0;                           //Tracks the number of steps a block is dropped
                                             //Hitting something
-    
+
     int speeds[21] = {887, 870, 753, 686,   //Speed per level
         619, 552, 469, 368, 285, 184, 167,
         151, 134, 117, 100, 100, 84, 84,
         67, 67, 50};
-    
+
     double speedCorrection = 0.87;          //Compensating for processing time
-    
+
     int action;                             //Store the actions given at the high score input
-    
+
     //Main game loop
     while (game)
     {
-        
+
         /* UPDATING SCORE */
-        
+
         score = get_score(score, drop, level, rowListTracker);
-        
+
         if (level < 20) {
             level = lines / 10;
         }
-        
+
         speed = speeds[level] * speedCorrection;
         n = speed;
-        
+
         if (score > 999999) {
             score = 999999;
         }
-        
+
         sprintf(title, "Score: %d Level: %d Lines: %d", score, level, lines);
         SDL_SetWindowTitle(data->window, title);
-        
-        
+
+
         /* RESETTING DATA */
-        
+
         reset = false;
         moving = true;
         int loopCounter = 0;
@@ -226,32 +226,32 @@ int game_loop(gameData* data)
         tileCounter = 0;
         rowListTracker = 0;
         drop = 0;
-        
+
         ////////////////////////////////
         /* ADDING BLOCKS TO TEMP GRID */
         ////////////////////////////////
-        
+
         //Adding random delay to avoid same block every game start
         SDL_Delay(rand() % 7);
-        
+
         //Randomizing block
         type = (rand() % types) + 1;
-        
+
         //Getting block information for specific block
         block = get_block(current_x, current_y, orientation, move, type);
-        
+
         //Adding blocks to tempGrid
         tempGrid[block.x1 * hMatrix + block.y1] = type;
         tempGrid[block.x2 * hMatrix + block.y2] = type;
         tempGrid[block.x3 * hMatrix + block.y3] = type;
         tempGrid[block.x4 * hMatrix + block.y4] = type;
-        
+
         //////////////////////////////////////////////////////
         /* RENDERING BLOCKS AND COMPARING grid AND tempGrid */
         //////////////////////////////////////////////////////
-        
+
         SDL_RenderClear(data->renderer);
-        
+
         for (j = 1; j < data->HEIGHT_IN_BLOCKS + 2; j++)
         {
             for (i = 1; i < data->WIDTH_IN_BLOCKS + 3; i++)
@@ -261,17 +261,17 @@ int game_loop(gameData* data)
                 if (tempGrid[i * hMatrix + j] > 0)
                     render_blocks (i, j, *data, tempGrid[i * hMatrix + j]);
                 if(grid[i * hMatrix + j] > 0 && tempGrid[i * hMatrix + j] > 0) {
-                    
+
                     ///////////////
                     /* GAME OVER */
                     ///////////////
-                    
+
                     //Show mouse pointer
                     SDL_ShowCursor(SDL_ENABLE);
-                    
+
                     //Render tempGrid and grid
                     SDL_RenderClear(data->renderer);
-                    
+
                     for (j = 1; j < data->HEIGHT_IN_BLOCKS + 2; j++)
                     {
                         for (i = 1; i < data->WIDTH_IN_BLOCKS + 3; i++)
@@ -282,36 +282,36 @@ int game_loop(gameData* data)
                                 render_blocks (i, j, *data, tempGrid[i * hMatrix + j]);
                         }
                     }
-                     
+
                     //Update the surface
                     SDL_RenderPresent(data->renderer);
                     SDL_UpdateWindowSurface(data->window);
-                    
+
                     SDL_Delay(speed);
-                    
+
                     //Empty key queue
                     while (SDL_PollEvent(&event)) { }
-                    
+
                     //////////////////////
                     /* GAME OVER SCREEN */
                     //////////////////////
-                    
+
                     //Hide game window
                     SDL_HideWindow(data->window);
-                    
+
                     if (!data->high_score_window_exist) {
                         data->high_score_window_exist = create_high_score_window(data);
                     } else {
                         SDL_ShowWindow(data->menu_window);
                     }
-                    
+
                     //Assigning title
                     char title[256];
                     sprintf(title, "Score: %d Level: %d Lines: %d", score, level, lines);
                     SDL_SetWindowTitle(data->menu_window, title);
-                    
+
                     action = render_highscore_input(score, lines, level, data);
-                    
+
                     if (action == 10) {
                         //Quit
                         return 1;
@@ -321,13 +321,13 @@ int game_loop(gameData* data)
                         SDL_ShowWindow(data->window);
                         return 2;
                     }
-                    
+
                     //Show high score
                     int mode;
                     mode = 10000 * data->WIDTH_IN_BLOCKS + data->HEIGHT_IN_BLOCKS;
-                    
+
                     action = show_high_score(data->menu_renderer, mode, *data, 2);
-                    
+
                     if (action == 0 || action == 1) {
                         //Quit
                         return 1;
@@ -337,7 +337,7 @@ int game_loop(gameData* data)
                         SDL_ShowWindow(data->window);
                         return 2;
                     }
-                    
+
                     //Waiting for restart or quit
                     while(true)
                     {
@@ -357,33 +357,33 @@ int game_loop(gameData* data)
                 }
             }
         }
-        
+
         //Update the surface
         SDL_RenderPresent(data->renderer);
         SDL_UpdateWindowSurface(data->window);
-        
+
         /////////////////////////////////////////////////
         /* REGISTER ROTATION, MOVEMENT OR ACCELERATION */
         /////////////////////////////////////////////////
-        
+
             while(moving) {
-                    
+
                 //Delay the loop by one game tick while checking for key action n times per tick
                 SDL_Delay(speed / n);
-                
+
                 //Reset move flag
                 valid = true;
-                
+
                 //Resting down flag
                 down = false;
-                
+
                 //Handle events on queue
                 while( SDL_PollEvent( &e ) != 0)
                 {
                     if( e.type == SDL_QUIT) {
                         //Quit Game
                         return 1;
-                        
+
                     } else if (e.key.keysym.sym == SDLK_ESCAPE && e.type == SDL_KEYDOWN) {
                         return 3;
                     } else if (e.key.keysym.sym == SDLK_p && e.type == SDL_KEYDOWN) {
@@ -403,7 +403,7 @@ int game_loop(gameData* data)
                             }
                             //Render empty game
                             SDL_RenderClear(data->renderer);
-                            
+
                             for (j = 1; j < data->HEIGHT_IN_BLOCKS + 2; j++)
                             {
                                 for (i = 1; i < data->WIDTH_IN_BLOCKS + 3; i++)
@@ -412,16 +412,16 @@ int game_loop(gameData* data)
                                         render_blocks (i, j, *data,grid[i * hMatrix + j]);
                                 }
                             }
-                            
+
                             //Update the surface
                             SDL_RenderPresent(data->renderer);
                             SDL_UpdateWindowSurface(data->window);
                             SDL_Delay(30);
                         }
-                        
+
                         //Render occupied grid
                         SDL_RenderClear(data->renderer);
-                        
+
                         for (j = 1; j < data->HEIGHT_IN_BLOCKS + 2; j++)
                         {
                             for (i = 1; i < data->WIDTH_IN_BLOCKS + 3; i++)
@@ -432,11 +432,11 @@ int game_loop(gameData* data)
                                     render_blocks (i, j, *data, tempGrid[i * hMatrix + j]);
                             }
                         }
-                        
+
                         //Update the surface
                         SDL_RenderPresent(data->renderer);
                         SDL_UpdateWindowSurface(data->window);
-                        
+
                     } else if (e.key.keysym.sym == SDLK_r && e.type == SDL_KEYUP) {
                         return 2;
                     } else if ((e.key.keysym.sym == SDLK_LEFT && e.type == SDL_KEYDOWN)
@@ -447,7 +447,7 @@ int game_loop(gameData* data)
                              || ((e.key.keysym.sym == SDLK_UP) && e.type == SDL_KEYDOWN)
                              || ((e.key.keysym.sym == SDLK_DOWN) && e.type == SDL_KEYDOWN)
                              || ((e.key.keysym.sym == SDLK_DOWN) && e.type == SDL_KEYUP)){
-                        
+
                         if (e.key.keysym.sym == SDLK_LEFT) {
                             move = 1;
                         } else if (e.key.keysym.sym == SDLK_RIGHT){
@@ -465,71 +465,84 @@ int game_loop(gameData* data)
                         } else if (e.key.keysym.sym == SDLK_DOWN && e.type == SDL_KEYDOWN) {
                             drop = 0;
                         }
-                        
+
                         //Get coordinates for moved block
                         blocks block;
                         block = get_block(current_x, current_y, orientation, move, type);
-                        
+
                         //Resetting move flag
                         move = 0;
-                        
+
                         //Add moved block to temptempGrid
                         temptempGrid[block.x1 * hMatrix + block.y1] = type;
                         temptempGrid[block.x2 * hMatrix + block.y2] = type;
                         temptempGrid[block.x3 * hMatrix + block.y3] = type;
                         temptempGrid[block.x4 * hMatrix + block.y4] = type;
-                        
+
                         //Antifreeze
                         printf("");
-                        
+
                         //Checking if the move is valid
                         for (j = current_y - 4; j < current_y + 4; j++)
                         {
                             for (i = current_x - 4; i < current_x + 4; i++)
                             {
                                 if(grid[i * hMatrix + j] > 0 && temptempGrid[i * hMatrix + j] > 0) {
-                                    
+
                                     //Invalid move
                                     valid = false;
-                                    
+
                                     move = 0;
-                                    
+
                                     //Antifreeze
                                     printf("");
-                                    
+
                                     temptempGrid[block.x1 * hMatrix + block.y1] = 0;
                                     temptempGrid[block.x2 * hMatrix + block.y2] = 0;
                                     temptempGrid[block.x3 * hMatrix + block.y3] = 0;
                                     temptempGrid[block.x4 * hMatrix + block.y4] = 0;
-                                    
+
                                     //exiting loops
                                     i = data->HEIGHT_IN_BLOCKS + 1;
                                     j = data->WIDTH_IN_BLOCKS + 2;
-                                    
+
                                     //Exiting mooving block loop and add a new block if block
                                     //lands on stationary object or ground
                                     if (down) {
-                                        
+
                                         //Double check to avoid glitches
                                         block = get_block(current_x, current_y, orientation, move, type);
                                         down = false;
-                                        
-                                        if (grid[block.x1 * hMatrix + block.y1] > 0)
+
+//                                        //DeBug
+//                                        for (j = 1; j < data->HEIGHT_IN_BLOCKS + 2; j++)
+//                                        {
+//                                            for (i = 1; i < data->WIDTH_IN_BLOCKS + 3; i++)
+//                                            {
+//                                                printf("%d", temptempGrid[i * hMatrix + j]);
+//                                            }
+//                                            printf("\n");
+//                                        }
+//                                        printf("\n");
+//                                        printf("\n");
+//                                        printf("\n");
+
+                                        if (grid[block.x1 * hMatrix + block.y1] > 0 && grid[block.x1 * hMatrix + block.y1] != 8 && grid[block.x1 * hMatrix + block.y1] < 10)
                                             if (!block_include(block, block.x1, block.y1 + 1))
                                                 down = true;
-                                        if (grid[block.x2 * hMatrix + block.y2] > 0)
+                                        if (grid[block.x2 * hMatrix + block.y2] > 0 && grid[block.x2 * hMatrix + block.y2] != 8 && grid[block.x2 * hMatrix + block.y2] < 10)
                                             if (!block_include(block, block.x2, block.y2) + 1)
                                                 down = true;
-                                        if (grid[block.x3 * hMatrix + block.y3] > 0)
+                                        if (grid[block.x3 * hMatrix + block.y3] > 0 && grid[block.x3 * hMatrix + block.y3] != 8 && grid[block.x3 * hMatrix + block.y3] < 10)
                                             if (!block_include(block, block.x3, block.y3) + 1)
                                                 down = true;
-                                        if (grid[block.x4 * hMatrix + block.y4] > 0)
+                                        if (grid[block.x4 * hMatrix + block.y4] > 0 && grid[block.x4 * hMatrix + block.y4] != 8 && grid[block.x4 * hMatrix + block.y4] < 10)
                                             if (!block_include(block, block.x3, block.y4) + 1)
                                                 down = true;
-                                        
+
                                         if (down) {
                                             moving = false;
-                                            
+
                                             //Merging tempGrid with grid
                                             for (j = current_y - 4; j < current_y + 4; j++)
                                             {
@@ -541,24 +554,24 @@ int game_loop(gameData* data)
                                                     }
                                                 }
                                             }
-                                        } 
+                                        }
                                     }
-                                    
+
                                     //Resetting orientation
                                     if (e.key.keysym.sym == SDLK_z){
                                         orientation = increase_orientation(orientation);
                                     } else if (e.key.keysym.sym == SDLK_x || e.key.keysym.sym == SDLK_SPACE || e.key.keysym.sym == SDLK_UP){
                                         orientation = decrease_orientation(orientation);
                                     }
-                                    
+
                                     //exiting loops
                                     i = data->HEIGHT_IN_BLOCKS + 1;
                                     j = data->WIDTH_IN_BLOCKS + 2;
-                                    
+
                                 }
                             }
                         }
-                        
+
                         if (valid) {
                             //Updating current x position
                             if (e.key.keysym.sym == SDLK_LEFT) {
@@ -566,34 +579,34 @@ int game_loop(gameData* data)
                             } else if (e.key.keysym.sym == SDLK_RIGHT) {
                                 current_x = current_x + 1;
                             }
-                            
-                            
+
+
                             /* Copy temptempGrid to tempGrid and reset temptempGrid */
-                            
+
                             //Resetting tempGrid to add moved block
                             for (j = current_y - 4; j < current_y + 4; j++)
                             {
                                 for (i = current_x - 4; i < current_x + 4; i++)
                                 {
-                                    tempGrid[i * hMatrix + j] = 0;                  
+                                    tempGrid[i * hMatrix + j] = 0;
                                 }
                             }
-                            
+
                             //Adding moved block to tempGrid
                             tempGrid[block.x1 * hMatrix + block.y1] = type;
                             tempGrid[block.x2 * hMatrix + block.y2] = type;
                             tempGrid[block.x3 * hMatrix + block.y3] = type;
                             tempGrid[block.x4 * hMatrix + block.y4] = type;
-                            
+
                             //Resetting temptempGrid
                             temptempGrid[block.x1 * hMatrix + block.y1] = 0;
                             temptempGrid[block.x2 * hMatrix + block.y2] = 0;
                             temptempGrid[block.x3 * hMatrix + block.y3] = 0;
                             temptempGrid[block.x4 * hMatrix + block.y4] = 0;
-                            
+
                             //Render tempGrid and grid
                             SDL_RenderClear(data->renderer);
-                            
+
                             for (j = 1; j < data->HEIGHT_IN_BLOCKS + 2; j++)
                             {
                                 for (i = 1; i < data->WIDTH_IN_BLOCKS + 3; i++)
@@ -604,60 +617,60 @@ int game_loop(gameData* data)
                                         render_blocks (i, j, *data, tempGrid[i * hMatrix + j]);
                                 }
                             }
-                            
+
                             //Update the surface
                             SDL_RenderPresent(data->renderer);
                             SDL_UpdateWindowSurface(data->window);
                         }
                     }
                 }
-                
+
                 loopCounter = loopCounter + 1;
-                
+
                 //Check if it is time for the block to go down one step
                 if (loopCounter >= n) {
-                    
+
                     //Simulating a DOWN push
                     SDL_Event sdlevent;
                     sdlevent.type = SDL_KEYDOWN;
                     sdlevent.key.keysym.sym = SDLK_DOWN;
                     SDL_PushEvent(&sdlevent);
                     drop = 0;
-                    
+
                 }
             }
-        
+
         //////////////////////////////////
         /* CHECK FOR ROWS TO BE REMOVED */
         //////////////////////////////////
-        
-        
+
+
         for (j = 0; j < data->HEIGHT_IN_BLOCKS; j++) {
             i = 0;
-            
+
             while (rowOccupied) {
                 if (grid[(i + 2) * hMatrix + (j + 1)] == 0) {
                     rowOccupied = false;
                 break;
                 }
-                
+
                 if (i == data->WIDTH_IN_BLOCKS - 1) {
-                    
+
                     //Row should be removed
                     rows[rowListTracker] = j + 1;
                     rowListTracker++;
                     lines++;
-                    
+
                 }
                 i++;
             }
             rowOccupied = true;
         }
-        
+
         ///////////////////
         /* REMOVING ROWS */
         ///////////////////
-        
+
         for (k = 0; k < rowListTracker; k++) {
             for (j = 0; j < rows[k]; j++)
             {
@@ -783,10 +796,7 @@ bool create_high_score_window(gameData *data) {
         return false;
     }
     
-    //Reinitializing sprites
-//    char font_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/font.png";
-//    char fader_path[256] = "/Users/SunandWeather/Documents/Xcode/CustomTetrominoes/CustomTetrominoes/res/fader.png";
-    
+    //Reinitializing sprites    
     char font_path[256] = "res/font.png";
     char fader_path[256] = "res/fader.png";
     

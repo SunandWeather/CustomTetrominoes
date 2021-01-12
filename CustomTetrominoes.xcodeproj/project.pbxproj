@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BA259B352567358C00BE1E08 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA259B342567358C00BE1E08 /* SDL2.framework */; };
 		BA9988F91E500FE40019EE28 /* highscore.c in Sources */ = {isa = PBXBuildFile; fileRef = BA9988F81E500FE40019EE28 /* highscore.c */; };
 		BA9988FC1E5010C90019EE28 /* SDL2_net.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA9988FB1E5010C90019EE28 /* SDL2_net.framework */; };
 		BA9B13E91E4680AA00900A8B /* font.c in Sources */ = {isa = PBXBuildFile; fileRef = BA9B13E81E4680AA00900A8B /* font.c */; };
 		BAF2D3AC1E24885B00AD34B7 /* SDL2_rotozoom.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF2D3AA1E24885B00AD34B7 /* SDL2_rotozoom.c */; };
 		BAF4C67A1E2443D000AF24B9 /* CustomTetrominoes.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = BAF4C6791E2443D000AF24B9 /* CustomTetrominoes.1 */; };
 		BAF4C6821E2443F300AF24B9 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAF4C6801E2443F300AF24B9 /* SDL2_image.framework */; };
-		BAF4C6831E2443F300AF24B9 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAF4C6811E2443F300AF24B9 /* SDL2.framework */; };
 		BAF4C6971E24443100AF24B9 /* blocks.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF4C6841E24443100AF24B9 /* blocks.c */; };
 		BAF4C6981E24443100AF24B9 /* game.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF4C6861E24443100AF24B9 /* game.c */; };
 		BAF4C6991E24443100AF24B9 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = BAF4C6881E24443100AF24B9 /* main.c */; };
@@ -24,7 +24,7 @@
 		BAF4C6721E2443D000AF24B9 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
+			dstPath = /usr/share/man/man1;
 			dstSubfolderSpec = 0;
 			files = (
 				BAF4C67A1E2443D000AF24B9 /* CustomTetrominoes.1 in CopyFiles */,
@@ -48,11 +48,12 @@
 		BA0188CC1E53D5BD0002BB48 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.png; sourceTree = "<group>"; };
 		BA0188CD1E53D5BD0002BB48 /* wall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wall.png; sourceTree = "<group>"; };
 		BA0188CE1E53D5BD0002BB48 /* Z_block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Z_block.png; sourceTree = "<group>"; };
+		BA259B342567358C00BE1E08 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../Skrivbord/Verktyg/Programmering/SDL2.framework; sourceTree = "<group>"; };
+		BA7DD77425A3EF9D0039C4D3 /* font.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = font.h; sourceTree = "<group>"; };
 		BA9988F81E500FE40019EE28 /* highscore.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = highscore.c; sourceTree = "<group>"; };
 		BA9988FA1E500FF60019EE28 /* highscore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = highscore.h; sourceTree = "<group>"; };
 		BA9988FB1E5010C90019EE28 /* SDL2_net.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_net.framework; path = ../../../../../Library/Frameworks/SDL2_net.framework; sourceTree = "<group>"; };
 		BA9B13E81E4680AA00900A8B /* font.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = font.c; sourceTree = "<group>"; };
-		BA9E53971E455BA500FBE215 /* font.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = font.h; path = ../font.h; sourceTree = "<group>"; };
 		BAF2D3AA1E24885B00AD34B7 /* SDL2_rotozoom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL2_rotozoom.c; sourceTree = "<group>"; };
 		BAF2D3AB1E24885B00AD34B7 /* SDL2_rotozoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDL2_rotozoom.h; sourceTree = "<group>"; };
 		BAF4C6741E2443D000AF24B9 /* CustomTetrominoes */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CustomTetrominoes; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,9 +74,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA259B352567358C00BE1E08 /* SDL2.framework in Frameworks */,
 				BA9988FC1E5010C90019EE28 /* SDL2_net.framework in Frameworks */,
 				BAF4C6821E2443F300AF24B9 /* SDL2_image.framework in Frameworks */,
-				BAF4C6831E2443F300AF24B9 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +104,14 @@
 			path = res;
 			sourceTree = "<group>";
 		};
+		BA259B332567358B00BE1E08 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BA259B342567358C00BE1E08 /* SDL2.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BAF4C66B1E2443D000AF24B9 = {
 			isa = PBXGroup;
 			children = (
@@ -111,6 +120,7 @@
 				BAF4C6811E2443F300AF24B9 /* SDL2.framework */,
 				BAF4C6761E2443D000AF24B9 /* CustomTetrominoes */,
 				BAF4C6751E2443D000AF24B9 /* Products */,
+				BA259B332567358B00BE1E08 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -128,8 +138,8 @@
 				BAF4C6791E2443D000AF24B9 /* CustomTetrominoes.1 */,
 				BAF4C6841E24443100AF24B9 /* blocks.c */,
 				BAF4C6851E24443100AF24B9 /* blocks.h */,
-				BA9E53971E455BA500FBE215 /* font.h */,
 				BA9B13E81E4680AA00900A8B /* font.c */,
+				BA7DD77425A3EF9D0039C4D3 /* font.h */,
 				BAF4C6871E24443100AF24B9 /* game.h */,
 				BAF4C6861E24443100AF24B9 /* game.c */,
 				BAF4C6881E24443100AF24B9 /* main.c */,
@@ -170,7 +180,7 @@
 		BAF4C66C1E2443D000AF24B9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = SunandWeather;
 			};
 			buildConfigurationList = BAF4C66F1E2443D000AF24B9 /* Build configuration list for PBXProject "CustomTetrominoes" */;
@@ -211,23 +221,37 @@
 		BAF4C67B1E2443D000AF24B9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -240,41 +264,62 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
+				LINK_WITH_STANDARD_LIBRARIES = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRIP_SWIFT_SYMBOLS = YES;
 			};
 			name = Debug;
 		};
 		BAF4C67C1E2443D000AF24B9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
+				LINK_WITH_STANDARD_LIBRARIES = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
+				STRIP_SWIFT_SYMBOLS = YES;
 			};
 			name = Release;
 		};
@@ -286,6 +331,7 @@
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -297,6 +343,7 @@
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
